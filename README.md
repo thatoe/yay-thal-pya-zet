@@ -1,6 +1,14 @@
-# Water Delivery System
+# 💧 Yay Thal Pya Zat
 
-Fresh water delivered to your door — a full-stack water delivery platform with landing page, REST API, real-time WebSocket support, and mobile app readiness.
+Fresh water delivered to your door — a full-stack water delivery platform with landing page SPA, REST API, real-time WebSocket support, and mobile app (Flutter).
+
+## Status
+
+| Layer        | Status      |
+| ------------ | ----------- |
+| Frontend SPA | ✅ Complete  |
+| Backend API  | 🔨 In Progress |
+| Mobile App   | 📋 Planned   |
 
 ## Tech Stack
 
@@ -13,6 +21,7 @@ Fresh water delivered to your door — a full-stack water delivery platform with
 | Cache     | Redis 7                                   |
 | Real-time | Socket.IO v4                              |
 | Auth      | JWT + bcryptjs                            |
+| Mobile    | Flutter + Dart                            |
 | Runtime   | Node.js 22                                |
 | Monorepo  | npm workspaces                            |
 
@@ -21,25 +30,26 @@ Fresh water delivered to your door — a full-stack water delivery platform with
 ```
 water-delivery/
 ├── apps/
-│   ├── api/                    # Hono API server (port 3001)
+│   ├── api/                    # Hono API server
 │   │   └── src/
 │   │       ├── index.ts        # Entry: Hono + Socket.IO + HTTP
 │   │       ├── config/env.ts   # Environment variables
 │   │       ├── routes/         # auth.ts, health.ts
 │   │       ├── middleware/     # auth.ts, error.ts
 │   │       └── ws/index.ts    # Socket.IO handlers
-│   └── web/                    # Next.js landing page (port 3000)
+│   └── web/                    # Next.js landing page SPA
 │       └── src/
-│           ├── app/            # App Router pages
-│           └── components/     # Navbar, Footer
+│           ├── app/            # App Router pages (6 pages)
+│           └── components/     # Navbar, Footer, ThemeToggle
 ├── packages/
 │   ├── db/                     # Drizzle ORM schema + connection
 │   └── shared/                 # Shared types & constants
 ├── docker/postgres/init.sql    # DB init script
-├── .devcontainer/              # VS Code devcontainer setup
-├── docker-compose.yml          # Full stack orchestration
+├── slides/
+│   └── pitch.md               # PechaKucha pitch deck (6 slides)
 ├── .claude/                    # Claude Code config, commands, docs
 ├── CLAUDE.md                   # Project conventions for Claude Code
+├── docker-compose.yml          # Full stack orchestration
 └── package.json                # Root workspace config
 ```
 
@@ -58,22 +68,21 @@ water-delivery/
 git clone <repo-url>
 cd water-delivery
 
-# Copy environment variables
-cp .env.example .env
-
 # Start all services
-npm run dev
+docker compose up -d --build
 ```
 
-This starts 5 containers:
+### Services
 
-| Service  | URL                          | Description             |
-| -------- | ---------------------------- | ----------------------- |
-| Web      | http://localhost:3000         | Next.js landing page    |
-| API      | http://localhost:3001         | Hono REST API           |
-| Postgres | localhost:5432               | PostgreSQL database     |
-| Redis    | localhost:6379               | Redis cache             |
-| pgAdmin  | http://localhost:5050         | Database admin UI       |
+| Service  | Host Port | URL                          | Description             |
+| -------- | --------- | ---------------------------- | ----------------------- |
+| Web      | 3003      | http://localhost:3003         | Next.js landing page    |
+| API      | 3002      | http://localhost:3002         | Hono REST API           |
+| Postgres | 5433      | localhost:5433               | PostgreSQL database     |
+| Redis    | 6380      | localhost:6380               | Redis cache             |
+| pgAdmin  | 5051      | http://localhost:5051         | Database admin UI       |
+
+> **Note:** Host ports are remapped to avoid conflicts with Cursor/OrbStack MCP servers running on default ports. Container ports remain standard (5432, 6379, 80, 3001, 3000).
 
 pgAdmin login: `admin@waterdelivery.com` / `admin`
 
@@ -83,100 +92,44 @@ pgAdmin login: `admin@waterdelivery.com` / `admin`
 # Install dependencies
 npm install
 
-# Start only infrastructure (Postgres + Redis)
-docker compose up postgres redis -d
+# Start only infrastructure
+docker compose up postgres redis pgadmin -d
 
-# Start API (port 3001)
+# Start API
 npm run dev:api
 
-# Start Web (port 3000)
+# Start Web
 npm run dev:web
 ```
 
 ## Available Scripts
 
-### Root
+### Features
 
-| Script            | Description                          |
-| ----------------- | ------------------------------------ |
-| `npm run dev`     | Start all Docker services            |
-| `npm run dev:api` | Start API server only                |
-| `npm run dev:web` | Start web app only                   |
-| `npm run build`   | Build all packages in order          |
-| `npm run lint`    | Lint all workspaces                  |
-| `npm run format`  | Format with Prettier                 |
+- ✅ Responsive design (mobile-first)
+- ✅ Dark/light mode toggle with persisted preference
+- ✅ DaisyUI theme system
+- ✅ FOUC prevention (no flash on theme load)
 
-### Database
+## Claude Code Integration
 
-| Script             | Description                          |
-| ------------------ | ------------------------------------ |
-| `npm run db:generate` | Generate Drizzle migrations       |
-| `npm run db:migrate`  | Run migrations                   |
-| `npm run db:push`     | Push schema changes (dev only)   |
-| `npm run db:studio`   | Open Drizzle Studio              |
+### MCP Servers
 
-## API Endpoints
+| MCP        | Purpose                          |
+| ---------- | -------------------------------- |
+| postgres   | Query and inspect database       |
+| github     | PRs, issues, repo management     |
+| playwright | Browser testing for landing page |
 
-### Health
+### Domain Specialists
 
-| Method | Path     | Description       | Auth |
-| ------ | -------- | ----------------- | ---- |
-| GET    | `/health` | Health check     | No   |
-
-### Auth
-
-| Method | Path            | Description              | Auth     |
-| ------ | --------------- | ------------------------ | -------- |
-| POST   | `/auth/register` | Register new user       | No       |
-| POST   | `/auth/login`    | Login, returns JWT      | No       |
-| GET    | `/auth/me`       | Get current user        | Bearer   |
-
-## Frontend Pages
-
-| Route            | Page           | Description                              |
-| ---------------- | -------------- | ---------------------------------------- |
-| `/`              | Home           | Hero section + "Why Choose Us"           |
-| `/products`      | Products       | 6 water products (Purified/Mineral/etc.) |
-| `/subscription`  | Subscription   | 3 plans: Basic, Standard, Premium        |
-| `/pricing`       | Pricing        | Add-ons + Enterprise plan                |
-| `/about`         | About          | Mission, stats, values                   |
-| `/contact`       | Contact        | Contact form + info                      |
-
-## Environment Variables
-
-Copy `.env.example` to `.env` and configure:
-
-```bash
-# API
-API_PORT=3001
-API_CORS_ORIGIN=http://localhost:3000
-
-# Frontend
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-## DevContainer
-
-Open the project in VS Code with the Dev Containers extension. The `.devcontainer/` config sets up:
-
-- Node.js 22 with git, curl, postgresql-client, redis-tools
-- Auto-installs dependencies on create
-- Forwards ports: 3000, 3001, 5432, 6379, 5050
-- Docker-in-Docker and GitHub CLI support
-
-Required VS Code extensions: ESLint, Prettier, Tailwind CSS, Docker, PostgreSQL, TypeScript.
-
-## Project Conventions
-
-- **TypeScript strict mode** — no `any`, explicit return types
-- **ESM** — all packages use `"type": "module"`, `.js` extensions in imports
-- **Named exports** preferred over default exports (except Next.js pages)
-- **API responses** follow `{ success: boolean, data?: T, error?: string }`
-- **Import aliases**: `@water-delivery/db`, `@water-delivery/shared`, `@/`
+- **Backend** — Hono + Socket.IO specialist
+- **Frontend** — Next.js + DaisyUI specialist
+- **Database** — PostgreSQL + Drizzle specialist
 
 ## Roadmap
 
-### Frontend — Landing Page (SPA)
+### Frontend — Landing Page (SPA) ✅
 
 - [x] Home page with hero section and "Why Choose Us"
 - [x] Products page — 6 water products with details and pricing
@@ -186,10 +139,11 @@ Required VS Code extensions: ESLint, Prettier, Tailwind CSS, Docker, PostgreSQL,
 - [x] Contact page — contact form with client-side state
 - [x] Navbar — sticky header with mobile responsive dropdown
 - [x] Footer — 4-column layout with links
-- [x] DaisyUI theming (`data-theme="water"`)
+- [x] DaisyUI theming (light + dark)
+- [x] Dark/light mode toggle with localStorage persistence
 - [x] Tailwind CSS v4 responsive design
 
-### Backend API
+### Backend API 🔨
 
 - [ ] Product CRUD endpoints (list, get, create, update, delete)
 - [ ] Subscription plan endpoints
@@ -202,7 +156,7 @@ Required VS Code extensions: ESLint, Prettier, Tailwind CSS, Docker, PostgreSQL,
 - [ ] Email notification service
 - [ ] Admin dashboard endpoints
 
-### Mobile App (Flutter)
+### Mobile App (Flutter) 📋
 
 - [ ] Project setup with Flutter + Dart
 - [ ] Authentication screens (login, register, forgot password)
