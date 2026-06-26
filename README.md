@@ -38,7 +38,8 @@ water-delivery/
 ├── docker/postgres/init.sql    # DB init script
 ├── .devcontainer/              # VS Code devcontainer setup
 ├── docker-compose.yml          # Full stack orchestration
-├── opencode.json               # OpenCode MCP + permissions
+├── .claude/                    # Claude Code config, commands, docs
+├── CLAUDE.md                   # Project conventions for Claude Code
 └── package.json                # Root workspace config
 ```
 

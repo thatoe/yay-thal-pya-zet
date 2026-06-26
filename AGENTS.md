@@ -67,23 +67,23 @@ water-delivery/
 │   ├── devcontainer.json         # VS Code devcontainer config
 │   ├── Dockerfile                # Dev container (Node.js 22 + tools)
 │   └── docker-compose.infra.yml # Infra-only compose (postgres, redis, pgadmin)
-├── .opencode/
-│   ├── agents/
-│   │   ├── frontend.md           # Next.js + DaisyUI specialist
-│   │   ├── backend.md            # Hono + Socket.IO specialist
-│   │   └── database.md           # PostgreSQL + Drizzle specialist
-│   ├── skills/
-│   │   ├── water-delivery-stack/SKILL.md
-│   │   └── docker-compose/SKILL.md
-│   └── commands/
-│       ├── dev.md                # /dev — Start all services
-│       ├── migrate.md             # /migrate — Run Drizzle migrations
-│       └── db-push.md             # /db-push — Push schema changes
+├── .claude/
+│   ├── commands/                # Slash commands
+│   │   ├── dev.md               # /dev — Start all services
+│   │   ├── migrate.md           # /migrate — Run Drizzle migrations
+│   │   └── db-push.md           # /db-push — Push schema changes
+│   └── docs/                    # Reference docs
+│       ├── backend.md           # Hono + Socket.IO specialist
+│       ├── frontend.md          # Next.js + DaisyUI specialist
+│       ├── database.md          # PostgreSQL + Drizzle specialist
+│       ├── water-delivery-stack.md
+│       └── docker-compose.md
 ├── .env                          # Environment variables (gitignored)
 ├── .env.example                  # Environment template
 ├── .gitignore
 ├── docker-compose.yml            # Full stack: all 5 services + hot-reload
-├── opencode.json                 # MCP servers, permissions, agents
+├── .claude/                      # Claude Code config, commands, docs
+├── CLAUDE.md                     # Project conventions for Claude Code
 ├── package.json                  # Root workspace config
 ├── tsconfig.json                 # Base TypeScript config
 └── AGENTS.md                     # This file — project conventions
@@ -127,16 +127,15 @@ water-delivery/
 | api      | 3001 | Hot-reload via volume mount       |
 | web      | 3000 | Hot-reload via volume mount       |
 
-## MCP Servers (OpenCode)
+## MCP Servers (Claude Code)
 
 | MCP        | Purpose                          |
 | ---------- | -------------------------------- |
 | postgres   | Query and inspect database       |
 | github     | PRs, issues, repo management     |
 | playwright | Browser testing for landing page |
-| Context7   | Library documentation lookup     |
 
-## Custom OpenCode Commands
+## Custom Claude Code Commands
 
 - `/dev` — Start all Docker services
 - `/migrate` — Run Drizzle migrations
