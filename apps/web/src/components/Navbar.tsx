@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -58,7 +59,8 @@ export function Navbar() {
         </ul>
       </div>
 
-      <div className="navbar-end">
+      <div className="navbar-end gap-2">
+        <ThemeToggle />
         <Link href="/subscription" className="btn btn-primary btn-sm">
           Subscribe Now
         </Link>
