@@ -1,1 +1,0 @@
-SELECT 'CREATE DATABASE water_delivery' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'water_delivery')\gexec

@@ -66,8 +66,10 @@ water-delivery/
 │       │   ├── types/            # API response, auth types
 │       │   └── constants/       # Roles, statuses
 │       └── package.json          # @water-delivery/shared
-├── docker/
-│   └── postgres/init.sql        # DB init script
+├── .devcontainer/
+│   ├── devcontainer.json         # VS Code devcontainer config
+│   ├── Dockerfile                # Dev container (Node.js 22 + tools)
+│   └── claude-env.sh             # Vibe proxy + Claude Code setup
 ├── .claude/
 │   ├── commands/                # Slash commands
 │   │   ├── dev.md               # /dev
@@ -109,7 +111,6 @@ water-delivery/
 | -------- | ---- | --------------------------------- |
 | postgres | 5432 | Health checked, persistent volume |
 | redis    | 6379 | Health checked, persistent volume |
-| pgadmin  | 5050 | admin@waterdelivery.com / admin   |
 | api      | 3001 | Hot-reload via volume mount       |
 | web      | 3000 | Hot-reload via volume mount       |
 

@@ -1,4 +1,4 @@
-Start all development services (PostgreSQL, Redis, pgAdmin, API, Web) using Docker Compose with hot-reload enabled.
+Start all development services (PostgreSQL, Redis, API, Web) using Docker Compose with hot-reload enabled.
 
 ```bash
 docker compose up --build

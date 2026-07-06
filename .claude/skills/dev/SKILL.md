@@ -1,6 +1,6 @@
 ---
 name: dev
-description: Start all Docker development services (PostgreSQL, Redis, pgAdmin, API, Web) with hot-reload
+description: Start all Docker development services (PostgreSQL, Redis, API, Web) with hot-reload
 ---
 
 # Dev

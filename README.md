@@ -44,7 +44,6 @@ water-delivery/
 ├── packages/
 │   ├── db/                     # Drizzle ORM schema + connection
 │   └── shared/                 # Shared types & constants
-├── docker/postgres/init.sql    # DB init script
 ├── slides/
 │   └── pitch.md               # PechaKucha pitch deck (6 slides)
 ├── .claude/                    # Claude Code config, commands, docs
@@ -80,11 +79,14 @@ docker compose up -d --build
 | API      | 3002      | http://localhost:3002         | Hono REST API           |
 | Postgres | 5433      | localhost:5433               | PostgreSQL database     |
 | Redis    | 6380      | localhost:6380               | Redis cache             |
-| pgAdmin  | 5051      | http://localhost:5051         | Database admin UI       |
 
-> **Note:** Host ports are remapped to avoid conflicts with Cursor/OrbStack MCP servers running on default ports. Container ports remain standard (5432, 6379, 80, 3001, 3000).
+> **Note:** Host ports are remapped to avoid conflicts with Cursor/OrbStack MCP servers running on default ports. Container ports remain standard (5432, 6379, 3001, 3000).
 
-pgAdmin login: `admin@waterdelivery.com` / `admin`
+Browse the database with Drizzle Studio:
+
+```bash
+npm run db:studio
+```
 
 ### Local Development (without Docker)
 
@@ -93,7 +95,7 @@ pgAdmin login: `admin@waterdelivery.com` / `admin`
 npm install
 
 # Start only infrastructure
-docker compose up postgres redis pgadmin -d
+docker compose up postgres redis -d
 
 # Start API
 npm run dev:api

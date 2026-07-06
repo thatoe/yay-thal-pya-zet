@@ -60,4 +60,4 @@ await db.update(users).set({ name: "New" }).where(eq(users.id, id));
 
 - **MCP**: Query directly via the postgres MCP server
 - **Docker**: `docker compose exec postgres psql -U postgres -d water_delivery`
-- **pgAdmin**: http://localhost:5051
+- **Drizzle Studio**: `npm run db:studio`
