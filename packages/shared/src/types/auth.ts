@@ -1,10 +1,4 @@
-export type Role = "customer" | "admin" | "driver";
-
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  role: Role;
-}
+export type Role = "user" | "admin" | "delivery";
 
 export interface RegisterRequest {
   email: string;
